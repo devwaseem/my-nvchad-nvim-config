@@ -29,7 +29,7 @@ local space = {
 
 local filename = {
   "filename",
-  color = { bg = colors.blue, fg = colors.black2 },
+  color = { bg = colors.one_bg, fg = colors.red },
   separator = { left = "", right = "" },
 }
 
@@ -102,20 +102,71 @@ local brand = {
   separator = { left = "", right = "" },
 }
 
-local function getLspName()
-  local msg = "No Active Lsp"
-  local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
+-- local function get_lsp_name()
+--   local msg = "No Active Lsp"
+--   local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
+--   local clients = vim.lsp.get_active_clients()
+--   if next(clients) == nil then
+--     return msg
+--   end
+--   for _, client in ipairs(clients) do
+--     local filetypes = client.config.filetypes
+--     if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+--       return "  " .. client.name
+--     end
+--   end
+--   return "  " .. msg
+-- end
+
+
+local function get_lsp_clients()
+  local registered = {}
   local clients = vim.lsp.get_active_clients()
+  for _, client in ipairs(clients) do
+    if client.name ~= "null-ls" then
+      table.insert(registered, client.name)
+    end
+  end
+  return registered
+end
+
+
+local function get_lsp_name()
+  local msg = "No Active Lsp"
+  local clients = get_lsp_clients()
   if next(clients) == nil then
     return msg
   end
-  for _, client in ipairs(clients) do
-    local filetypes = client.config.filetypes
-    if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-      return "  " .. client.name
+
+  return "  " .. table.concat(clients, ", ")
+end
+
+local function get_null_sources()
+  local registered = {}
+  local sources_avail, sources = pcall(require, "null-ls.sources")
+  if not sources_avail then
+    return ""
+  end
+  local methods = {
+    "NULL_LS_DIAGNOSTICS",
+    "NULL_LS_DIAGNOSTICS_ON_OPEN",
+    "NULL_LS_DIAGNOSTICS_ON_SAVE",
+    "NULL_LS_FORMATTING",
+    "NULL_LS_RANGE_FORMATTING"
+  }
+  for _, method in ipairs(methods) do
+    for _, source in pairs(sources.get_available(vim.bo.filetype, method)) do
+      local tool = source.name
+      if registered[tool] == nil then
+        registered[tool] = tool
+      end
     end
   end
-  return "  " .. msg
+  local tools = {}
+  for _, tool in pairs(registered) do
+    table.insert(tools, tool)
+  end
+  return table.concat(tools, ", ")
 end
 
 local dia = {
@@ -126,10 +177,18 @@ local dia = {
 
 local lsp = {
   function()
-    return getLspName()
+    return get_lsp_name()
   end,
   separator = { left = "", right = "" },
   color = { bg = colors.red, fg = colors.black2 },
+}
+
+local null_ls_sources = {
+  function()
+    return get_null_sources()
+  end,
+  separator = { left = "", right = "" },
+  color = { bg = colors.one_bg3, fg = colors.red },
 }
 
 require("lualine").setup {
@@ -177,6 +236,7 @@ require("lualine").setup {
     lualine_z = {
       encoding,
       dia,
+      null_ls_sources,
       lsp,
       space,
       brand,

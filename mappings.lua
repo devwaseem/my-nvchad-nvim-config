@@ -4,7 +4,7 @@ local M = {}
 M.general = {
   n = {
     [";"] = { ":", "enter command mode", opts = { nowait = true } },
-    ["<leader>w>"] = { "<cmd> w <CR>", "save file" },
+    ["<leader>w"] = { "<cmd> w <CR>", "save file" },
     -- Improved navigation
     ["<C-d>"] = { "<C-d>zz", "Scroll down" },
     ["<C-u>"] = { "<C-u>zz", "Scroll up" },
@@ -30,9 +30,7 @@ M.general = {
     ["<leader>xq"] = { "<cmd>TroubleToggle quickfix<cr>", "Toggle Trouble for Quick Fix" },
     ["gR"] = { "<cmd>TroubleToggle lsp_references<cr>", "Toggle Trouble for LSP References" },
     ["<leader>c"] = {
-      function()
-        require("nvchad_ui.tabufline").close_buffer()
-      end,
+      "<cmd> bdelete <cr>",
       "close buffer",
     },
   },
