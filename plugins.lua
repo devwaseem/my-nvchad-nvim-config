@@ -54,7 +54,6 @@ local plugins = {
       require("better_escape").setup()
     end,
   },
-
   {
     "Pocco81/TrueZen.nvim",
     cmd = { "TZAtaraxis", "TZMinimalist" },
@@ -116,7 +115,85 @@ local plugins = {
     end,
   },
   { "akinsho/toggleterm.nvim", cmd = { "ToggleTerm", "TermExec" }, opts = overrides.ToggleTerm },
-  { "kdheepak/lazygit.nvim", cmd = { "LazyGit", "LazyGitFilter", "LazyGitFilterCurrentFile" }, ops = overrides.LazyGit },
+  {
+    "kdheepak/lazygit.nvim",
+    cmd = { "LazyGit", "LazyGitFilter", "LazyGitFilterCurrentFile" },
+    ops = overrides.LazyGit,
+  },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    lazy = false,
+    opts = overrides.TodoComments,
+    config = function()
+      require("todo-comments").setup()
+    end,
+  },
+
+  {
+    "RRethy/nvim-treesitter-textsubjects",
+    lazy = false,
+    opts = overrides.TreesitterTextSubjects,
+    config = function()
+      require("treesitter-context").setup { enable = true }
+    end,
+  },
+  {
+    "romgrk/nvim-treesitter-context",
+    lazy = false,
+  },
+  {
+    "phaazon/hop.nvim",
+    branch = "v2",
+    cmd = { "HopWord", "HopChar1", "HopChar2", "HopLine", "HopLineStart", "HopAnywhere" },
+    opts = {},
+  },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "BufRead",
+    config = function()
+      require("lsp_signature").setup()
+    end,
+  },
+  { "mattn/emmet-vim", lazy = false },
+  { "https://github.com/preservim/tagbar" },
+  { "bps/vim-textobj-python", lazy = false },
+  { "kana/vim-textobj-user", lazy = false },
+  { "tpope/vim-surround", lazy = false, },
+  {
+    "folke/trouble.nvim",
+    cmd = "TroubleToggle",
+    opts = overrides.Trouble,
+  },
+  {
+		'nvim-lualine/lualine.nvim',
+    lazy=false,
+		dependencies = { 'nvim-tree/nvim-web-devicons', },
+    opts=overrides.lualine,
+    config = function(_, opts)
+      require('custom.configs.lualine')
+    end
+	},
+  {
+    "kdheepak/tabline.nvim",
+    lazy = false,
+    opts = overrides.tabline,
+    config = function(_, opts)
+      require("tabline").setup(opts)
+      vim.cmd [[
+      set guioptions-=e " Use showtabline in gui vim
+      set sessionoptions+=tabpages,globals " store tabpages and globals in session
+      ]]
+    end,
+  },
+  {
+    "tiagovla/scope.nvim",
+    lazy=false,
+    config = function()
+      require('scope').setup()
+    end
+  },
+
 }
 
 return plugins

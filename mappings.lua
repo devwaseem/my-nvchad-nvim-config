@@ -16,7 +16,7 @@ M.general = {
     ["<A-Left>"] = { "<C-w>h", "Move to left split" },
     ["<A-Right>"] = { "<C-w>l", "Move to right split" },
     -- Trouble
-    ["<leader>x"] =  { "" },
+    ["<leader>x"] = { "" },
     ["<leader>xx"] = { "<cmd>TroubleToggle<cr>", "Toggle Trouble" },
     ["<leader>xw"] = {
       "<cmd>TroubleToggle workspace_diagnostics<cr>",
@@ -69,6 +69,24 @@ M.neotree = {
 
 M.lspconfig = {
   n = {
+    ["gd"] = {
+      function()
+        require("telescope.builtin").lsp_definitions()
+      end,
+      "lsp definition",
+    },
+    ["gr"] = {
+      function()
+        require("telescope.builtin").lsp_references()
+      end,
+      "lsp references",
+    },
+    ["gi"] = {
+      function()
+        require("telescope.builtin").lsp_implementations()
+      end,
+      "lsp implementation",
+    },
     ["<leader>lr"] = {
       function()
         require("nvchad_ui.renamer").open()
@@ -144,6 +162,9 @@ M.telescope = {
       end,
       "Search symbols",
     },
+
+    -- theme switcher
+    ["<leader>ft"] = { "<cmd> Telescope themes <CR>", "nvchad themes" },
   },
 }
 
@@ -169,14 +190,23 @@ M.ToggleTerm = {
   },
 }
 
-M.buffers = {
+M.Tabs = {
   n = {
-    ["<S-l>"] = {
+    ["<TAB>"] = {
       "<cmd> bnext <cr>",
+      "goto next buffer",
+    },
+
+    ["<S-Tab>"] = {
+      "<cmd> bprevious <cr>",
+      "goto prev buffer",
+    },
+    ["<S-l>"] = {
+      "<cmd> tabnext <cr>",
       "Move to Next Buffer",
     },
     ["<S-h>"] = {
-      "<cmd> bprev <cr>",
+      "<cmd> tabprevious <cr>",
       "Move to Prev Buffer",
     },
   },
@@ -249,8 +279,102 @@ M.gitsigns = {
 
 M.LazyGit = {
   n = {
-    ["<leader>gg"] = {"<CMD> LazyGit <cr>", "Toggle Lazy Git"}
-  }
+    ["<leader>gg"] = { "<CMD> LazyGit <cr>", "Toggle Lazy Git" },
+  },
+}
+
+M.hop = {
+  n = {
+    ["s"] = { "<cmd>HopChar1<cr>", "Hop using 1 char" },
+    ["S"] = { "<cmd>HopChar2<cr>", "Hop using 2 char" },
+    ["sl"] = { "<cmd>HopLineStart<cr>", "Hop to the line start" },
+    ["sw"] = { "<cmd>HopWord<cr>", "Hop to a word" },
+    ["sa"] = { "<cmd>HopAnywhere<cr>", "Hop Anywhere" },
+    ["f"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.AFTER_CURSOR,
+          current_line_only = true,
+        }
+      end,
+      "Find a character in current line after the cursor",
+    },
+    ["F"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.BEFORE_CURSOR,
+          current_line_only = true,
+        }
+      end,
+      "Find a character in current line before the cursor",
+    },
+    ["t"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.AFTER_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        }
+      end,
+      "Jump a character in current line after the cursor",
+    },
+    ["T"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.BEFORE_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        }
+      end,
+      "Jump a character in current line before the cursor",
+    },
+  },
+
+  v = {
+    ["s"] = { "<cmd>HopChar1<cr>", "Hop using 1 char" },
+    ["S"] = { "<cmd>HopChar2<cr>", "Hop using 2 char" },
+    ["sl"] = { "<cmd>HopLineStart<cr>", "Hop to the line start" },
+    ["sw"] = { "<cmd>HopWord<cr>", "Hop to a word" },
+    ["sa"] = { "<cmd>HopAnywhere<cr>", "Hop Anywhere" },
+    ["f"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.AFTER_CURSOR,
+          current_line_only = true,
+        }
+      end,
+      "Find a character in current line after the cursor",
+    },
+    ["F"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.BEFORE_CURSOR,
+          current_line_only = true,
+        }
+      end,
+      "Find a character in current line before the cursor",
+    },
+    ["t"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.AFTER_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        }
+      end,
+      "Jump a character in current line after the cursor",
+    },
+    ["T"] = {
+      function()
+        require("hop").hint_char1 {
+          direction = require("hop.hint").HintDirection.BEFORE_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        }
+      end,
+      "Jump a character in current line before the cursor",
+    },
+  },
 }
 
 return M

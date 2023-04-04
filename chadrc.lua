@@ -5,16 +5,22 @@ local M = {}
 local highlights = require "custom.highlights"
 
 M.ui = {
- theme = "tokyodark",
-  theme_toggle = { "tokyodark", "one_light" },
+ theme = "ayu_dark",
+  theme_toggle = { "ayu_dark", "one_light" },
 
   hl_override = highlights.override,
   hl_add = highlights.add,
 
   statusline = {
+    enabled=false,
     theme = "minimal",
     separator_style = "round",
   },
+
+  tabufline = {
+    enabled = false
+  },
+
 
   nvdash = {
     load_on_startup = true
